@@ -12,10 +12,54 @@ function App() {
           </Button>
         </FilterTrigger>
         <FilterContent
-          fields={["Age", "Name"] as const}
+          fields={
+            [
+              "Ages",
+              "Name",
+            ] as const
+          }
           operators={
             ["is", "is not", "is greater than", "is less than"] as const
           }
+          filter={{
+            and: [
+              {
+                id: "1",
+                field:
+                  "Ages",
+                operator: "is less than",
+                value: "",
+              },
+              {
+                or: [
+                  {
+                    id: "2",
+                    field:
+                      "Ages",
+                    operator: "is",
+                    value: "",
+                  },
+                  {
+                    and: [
+                      {
+                        id: "3",
+                        field: "Name",
+                        operator: "is greater than",
+                        value: "",
+                      },
+                      {
+                        id: "4",
+                        field:
+                          "Ages",
+                        operator: "is not",
+                        value: "",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          }}
         />
       </Filter>
     </div>

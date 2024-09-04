@@ -56,7 +56,6 @@ const FilterTrigger = PopoverPrimitive.Trigger;
 const FilterAnchor = PopoverPrimitive.Anchor;
 
 const FilterContext = React.createContext<{
-  // filter: Filter<string[], string[]>;
   fields: string[];
   operators: string[];
   setFilter: (
@@ -79,42 +78,11 @@ const FilterContent = <A extends string[], B extends string[]>(
     React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) => {
-  const [filter, setFilter] = React.useState<BaseFilter<A, B>>({
-    and: [
-      {
-        id: "1",
-        field: fields[1],
-        operator: operators[0],
-        value: "",
-      },
-      {
-        or: [
-          {
-            id: "2",
-            field: fields[1],
-            operator: operators[0],
-            value: "",
-          },
-          {
-            and: [
-              {
-                id: "3",
-                field: fields[1],
-                operator: operators[0],
-                value: "",
-              },
-              {
-                id: "4",
-                field: fields[1],
-                operator: operators[0],
-                value: "",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  });
+  const [filter, setFilter] = React.useState<BaseFilter<A, B>>(
+    filter_ ?? {
+      or: [],
+    },
+  );
 
   const setFilter_ = useMemo(() => {
     return (recipe: (filter: BaseFilter<A, B>) => BaseFilter<A, B> | void) =>
@@ -132,6 +100,8 @@ const FilterContent = <A extends string[], B extends string[]>(
           align={align}
           sideOffset={sideOffset}
           style={{
+            maxWidth:
+              "calc(var(--radix-popover-content-available-width) - 20px)",
             maxHeight:
               "calc(var(--radix-popover-content-available-height) - 10px)",
           }}
@@ -324,7 +294,7 @@ const FilterRow = <A extends string[], B extends string[]>({
   return (
     <>
       <Select
-        className="h-8 px-3"
+        className="h-8 justify-between px-3"
         onChange={setItem.bind(null, "field")}
         defaultValue={filter?.field}
         options={fields}
